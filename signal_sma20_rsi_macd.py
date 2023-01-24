@@ -5,11 +5,15 @@ import ccxt
 import pandas as pd
 from dotenv import load_dotenv
 from pathlib import Path
+import concurrent.futures
 
 dotenv_path = Path('.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 os.system('')
+
+utArray = ['5m', '15m', '30m', '1h', '4h', '1d', '1w']
+pairArray = ['BTC/BUSD','ETH/BUSD']
 
 class bcolors:
     HEADER = '\033[95m'
@@ -18,6 +22,7 @@ class bcolors:
     OKGREEN = '\033[92m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
+    YELLOW = '\033[93m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
@@ -35,12 +40,8 @@ binance = ccxt.binance({
     }
 })
 
-binanceData = {}
-
-utArray = ['5m', '15m', '30m', '1h', '4h', '1d', '1w']
-pairArray = ['BTC/BUSD','ETH/BUSD']
 for i in pairArray :
-    print(bcolors.OKBLUE + "================================ " + i + " - BINANCE ================================" + bcolors.ENDC)
+    print(bcolors.OKBLUE + "================================ " + bcolors.HEADER + i + bcolors.ENDC + " - " + bcolors.YELLOW + "BINANCE" + bcolors.OKBLUE + " ================================" + bcolors.ENDC)
     for j in utArray :
         # Get historical data for Ethereum on Binance
         ohlcv= binance.fetch_ohlcv(i, j)
@@ -61,18 +62,17 @@ for i in pairArray :
         signal = macd.ewm(span=9, adjust=False).mean()
 
         # Generate the buy and sell signals
-        print("------ " + i + " - BINANCE - " + " Unité de temps : " + j + " ------")
+        print("------ " + bcolors.HEADER + i + bcolors.ENDC + " - " + bcolors.YELLOW + "BINANCE" + bcolors.ENDC + " - Unité de temps : " + j + " ------")
 
         if (df["close"].iloc[-1] > sma20.iloc[-1]) and (rsi.iloc[-1] > 70) and (macd.iloc[-1] > signal.iloc[-1]):
-            print(bcolors.OKGREEN + "------ " + "Signal d'achat fort" + bcolors.ENDC)
+            print("------ " + bcolors.OKGREEN + "Signal d'achat fort" + bcolors.ENDC)
         elif (df["close"].iloc[-1] > sma20.iloc[-1]) and (rsi.iloc[-1] > 50) and (macd.iloc[-1] > signal.iloc[-1]):
-            print(bcolors.WARNING + "------ " + "Signal d'achat modéré" + bcolors.ENDC)
+            print("------ " + bcolors.WARNING + "Signal d'achat modéré" + bcolors.ENDC)
         elif (df["close"].iloc[-1] < sma20.iloc[-1]) and (rsi.iloc[-1] < 30) and (macd.iloc[-1] < signal.iloc[-1]):
-            print(bcolors.FAIL + "------ " + "Signal de vente fort" + bcolors.ENDC)
+            print("------ " + bcolors.FAIL + "Signal de vente fort" + bcolors.ENDC)
         elif (df["close"].iloc[-1] < sma20.iloc[-1]) and (rsi.iloc[-1] < 50) and (macd.iloc[-1] < signal.iloc[-1]):
-            print(bcolors.WARNING + "------ " + "Signal de vente modéré" + bcolors.ENDC)
+            print("------ " + bcolors.WARNING + "Signal de vente modéré" + bcolors.ENDC)
         else:
-            print("------ " + "Pas de signal")
+            print("------ " + bcolors.OKCYAN + "Pas de signal" + bcolors.ENDC)
 
         print("---------------------------------")
-print(bcolors.OKBLUE + "==================================================================================" + bcolors.ENDC)
