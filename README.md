@@ -26,12 +26,13 @@ pip install -r requirements.txt
 
 ## Configuration
 
-Create a `.env` file at the root of the project with your Binance credentials:
+Create a `.env` file at the root of your project with the following content:
 
-```
-API_KEY=your_binance_api_key
-API_SECRET=your_binance_api_secret
-```
+- `UT_ARRAY`: Comma-separated list of timeframes.
+- `PAIR_ARRAY`: Comma-separated list of trading pairs.
+- `API_KEY` and `API_SECRET`: Your Binance API credentials.
+
+The script automatically loads these variables for its configuration
 
 ## Usage
 
@@ -40,11 +41,6 @@ Run the script:
 ```bash
 python signal_sma20_rsi_macd.py
 ```
-
-## Customization
-
-Edit `pairArray` in `signal_sma20_rsi_macd.py` to change the pairs.
-Edit `utArray` to change the timeframes.
 
 ## Disclaimer
 
