@@ -1,2 +1,18 @@
-.env
-.vscode
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# JetBrains IDE (PhpStorm)
+.idea/
+
+# VS Code
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Env file
+.env*
